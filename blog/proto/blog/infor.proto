@@ -1,0 +1,13 @@
+syntax = "proto3";
+package example.blog.blog;
+
+option go_package = "github.com/example/blog/x/blog/types";
+
+import "gogoproto/gogo.proto";
+
+message Infor {
+  string creator = 1;
+  uint64 id = 2;
+  string name = 3; 
+  string age = 4; 
+}
