@@ -15,16 +15,17 @@ func CmdCreateAttendance() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create-attendance",
 		Short: "Creates a new attendance",
-		Args:  cobra.ExactArgs(1),
+		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			argsTime := time.Now().String()
-
+			loc, _ := time.LoadLocation("Asia/Ho_Chi_Minh")
+			argsTime := time.Now().In(loc)
+			argsTimeString := argsTime.String()
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgCreateAttendance(clientCtx.GetFromAddress().String(), string(argsTime))
+			msg := types.NewMsgCreateAttendance(clientCtx.GetFromAddress().String(), argsTimeString)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -39,23 +40,25 @@ func CmdCreateAttendance() *cobra.Command {
 
 func CmdUpdateAttendance() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-attendance [id] [time]",
+		Use:   "update-attendance [id]",
 		Short: "Update a attendance",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			id, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
 				return err
 			}
 
-			argsTime := string(args[1])
+			loc, _ := time.LoadLocation("Asia/Ho_Chi_Minh")
+			argsTime := time.Now().In(loc)
+			argsTimeString := argsTime.String()
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgUpdateAttendance(clientCtx.GetFromAddress().String(), id, string(argsTime))
+			msg := types.NewMsgUpdateAttendance(clientCtx.GetFromAddress().String(), id, argsTimeString)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -70,7 +73,7 @@ func CmdUpdateAttendance() *cobra.Command {
 
 func CmdDeleteAttendance() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "delete-attendance [id] [time]",
+		Use:   "delete-attendance [id]",
 		Short: "Delete a attendance by id",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
