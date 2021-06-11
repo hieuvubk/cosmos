@@ -2,15 +2,58 @@ package keeper
 
 import (
 	"context"
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/tendermint/tendermint/crypto"
 	"github.com/username/voter/x/voter/types"
+	"strings"
+	"time"
 )
 
 func (k msgServer) CreateAttendance(goCtx context.Context, msg *types.MsgCreateAttendance) (*types.MsgCreateAttendanceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Each account should be allowed to have only 1 attendance per day.
+	attendanceList := k.GetAllAttendance(ctx)
+	msgTimeParts := strings.Fields(msg.Time)
+	msgTime := msgTimeParts[0]
+	//loc, _ := time.LoadLocation("Asia/Ho_Chi_Minh")
+	//todayTime := time.Now().In(loc)
+	//todayTimeString := todayTime.String()
+	//todayTimeStringParts := strings.Fields(todayTimeString)
+	//todayTimeStringPartsDate := todayTimeStringParts[0]
+	for _, existingAttendance := range attendanceList {
+		// Check if the account has already checked attendance today
+		if existingAttendance.Creator == msg.Creator {
+			existingTimeParts := strings.Fields(existingAttendance.Time)
+			existingTime := existingTimeParts[0]
+			if existingTime == msgTime {
+				// Return an error when an attendance has been checked by this account on this day
+				return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "You have already checked for attendance today!")
+			}
+		}
+	}
+
+	// deduct a number of tokens from the account of the msg's creator if they were checking late
+	currentHMSString := msgTimeParts[1]
+	currentHMS, _ := time.Parse("15:04:05.999999999", currentHMSString)
+	currentHour := currentHMS.Hour()
+	// checking late
+	if currentHour >= 9 {
+		moduleAcct := sdk.AccAddress(crypto.AddressHash([]byte(types.ModuleName)))
+		// deduct token
+		feeCoins, err := sdk.ParseCoinsNormalized("10token")
+		if err != nil {
+			return nil, err
+		}
+		creatorAddress, err := sdk.AccAddressFromBech32(msg.Creator)
+		if err != nil {
+			return nil, err
+		}
+		if err := k.bankKeeper.SendCoins(ctx, creatorAddress, moduleAcct, feeCoins); err != nil {
+			return nil, err
+		}
+	}
 
 	id := k.AppendAttendance(
 		ctx,
@@ -27,40 +70,43 @@ func (k msgServer) CreateAttendance(goCtx context.Context, msg *types.MsgCreateA
 }
 
 func (k msgServer) UpdateAttendance(goCtx context.Context, msg *types.MsgUpdateAttendance) (*types.MsgUpdateAttendanceResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
+	return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "You cannot update your attendance by any means!")
 
-	var attendance = types.Attendance{
-		Creator: msg.Creator,
-		Id:      msg.Id,
-		Time:    msg.Time,
-	}
+	//ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// Checks that the element exists
-	if !k.HasAttendance(ctx, msg.Id) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
-	}
-
-	// Checks if the the msg sender is the same as the current owner
-	if msg.Creator != k.GetAttendanceOwner(ctx, msg.Id) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
-	}
-
-	k.SetAttendance(ctx, attendance)
-
-	return &types.MsgUpdateAttendanceResponse{}, nil
+	//var attendance = types.Attendance{
+	//	Creator: msg.Creator,
+	//	Id:      msg.Id,
+	//	Time:    msg.Time,
+	//}
+	//
+	//// Checks that the element exists
+	//if !k.HasAttendance(ctx, msg.Id) {
+	//	return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
+	//}
+	//
+	//// Checks if the the msg sender is the same as the current owner
+	//if msg.Creator != k.GetAttendanceOwner(ctx, msg.Id) {
+	//	return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
+	//}
+	//
+	//k.SetAttendance(ctx, attendance)
+	//
+	//return &types.MsgUpdateAttendanceResponse{}, nil
 }
 
 func (k msgServer) DeleteAttendance(goCtx context.Context, msg *types.MsgDeleteAttendance) (*types.MsgDeleteAttendanceResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if !k.HasAttendance(ctx, msg.Id) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
-	}
-	if msg.Creator != k.GetAttendanceOwner(ctx, msg.Id) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
-	}
-
-	k.RemoveAttendance(ctx, msg.Id)
-
-	return &types.MsgDeleteAttendanceResponse{}, nil
+	return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "You cannot delete your attendance by any means!")
+	//ctx := sdk.UnwrapSDKContext(goCtx)
+	//
+	//if !k.HasAttendance(ctx, msg.Id) {
+	//	return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
+	//}
+	//if msg.Creator != k.GetAttendanceOwner(ctx, msg.Id) {
+	//	return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
+	//}
+	//
+	//k.RemoveAttendance(ctx, msg.Id)
+	//
+	//return &types.MsgDeleteAttendanceResponse{}, nil
 }
