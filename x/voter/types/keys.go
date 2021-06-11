@@ -1,0 +1,37 @@
+package types
+
+const (
+	// ModuleName defines the module name
+	ModuleName = "voter"
+
+	// StoreKey defines the primary module store key
+	StoreKey = ModuleName
+
+	// RouterKey is the message route for slashing
+	RouterKey = ModuleName
+
+	// QuerierRoute defines the module's query routing key
+	QuerierRoute = ModuleName
+
+	// MemStoreKey defines the in-memory store key
+	MemStoreKey = "mem_capability"
+)
+
+func KeyPrefix(p string) []byte {
+	return []byte(p)
+}
+
+const (
+	AttendanceKey      = "Attendance-value-"
+	AttendanceCountKey = "Attendance-count-"
+)
+
+const (
+	InformationKey      = "Information-value-"
+	InformationCountKey = "Information-count-"
+)
+
+const (
+	RequestAttendanceKey      = "RequestAttendance-value-"
+	RequestAttendanceCountKey = "RequestAttendance-count-"
+)

@@ -1,0 +1,88 @@
+syntax = "proto3";
+package username.voter.voter;
+
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+// this line is used by starport scaffolding # 1
+import "voter/RequestAttendance.proto";
+import "voter/information.proto";
+import "voter/attendance.proto";
+
+option go_package = "github.com/username/voter/x/voter/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // this line is used by starport scaffolding # 2
+	rpc RequestAttendance(QueryGetRequestAttendanceRequest) returns (QueryGetRequestAttendanceResponse) {
+		option (google.api.http).get = "/username/voter/voter/RequestAttendance/{id}";
+	}
+	rpc RequestAttendanceAll(QueryAllRequestAttendanceRequest) returns (QueryAllRequestAttendanceResponse) {
+		option (google.api.http).get = "/username/voter/voter/RequestAttendance";
+	}
+
+	rpc Information(QueryGetInformationRequest) returns (QueryGetInformationResponse) {
+		option (google.api.http).get = "/username/voter/voter/information/{id}";
+	}
+	rpc InformationAll(QueryAllInformationRequest) returns (QueryAllInformationResponse) {
+		option (google.api.http).get = "/username/voter/voter/information";
+	}
+
+	rpc Attendance(QueryGetAttendanceRequest) returns (QueryGetAttendanceResponse) {
+		option (google.api.http).get = "/username/voter/voter/attendance/{id}";
+	}
+	rpc AttendanceAll(QueryAllAttendanceRequest) returns (QueryAllAttendanceResponse) {
+		option (google.api.http).get = "/username/voter/voter/attendance";
+	}
+
+}
+
+// this line is used by starport scaffolding # 3
+message QueryGetRequestAttendanceRequest {
+	uint64 id = 1;
+}
+
+message QueryGetRequestAttendanceResponse {
+	RequestAttendance RequestAttendance = 1;
+}
+
+message QueryAllRequestAttendanceRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllRequestAttendanceResponse {
+	repeated RequestAttendance RequestAttendance = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+message QueryGetInformationRequest {
+	string creator = 1;
+	int64 id = 2;
+}
+
+message QueryGetInformationResponse {
+	Information Information = 1;
+}
+
+message QueryAllInformationRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllInformationResponse {
+	repeated Information Information = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+message QueryGetAttendanceRequest {
+	uint64 id = 1;
+}
+
+message QueryGetAttendanceResponse {
+	Attendance Attendance = 1;
+}
+
+message QueryAllAttendanceRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllAttendanceResponse {
+	repeated Attendance Attendance = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

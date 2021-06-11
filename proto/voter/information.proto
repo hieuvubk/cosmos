@@ -1,0 +1,16 @@
+syntax = "proto3";
+package username.voter.voter;
+
+option go_package = "github.com/username/voter/x/voter/types";
+
+import "gogoproto/gogo.proto";
+
+message Information {
+  string creator = 1;
+  uint64 id = 2;
+  string name = 3; 
+  string dob = 4; 
+  string address = 5; 
+  string email = 6; 
+  string phone = 7; 
+}

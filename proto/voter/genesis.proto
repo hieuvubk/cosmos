@@ -1,0 +1,18 @@
+syntax = "proto3";
+package username.voter.voter;
+
+// this line is used by starport scaffolding # genesis/proto/import
+import "voter/RequestAttendance.proto";
+import "voter/information.proto";
+import "voter/attendance.proto";
+
+option go_package = "github.com/username/voter/x/voter/types";
+
+// GenesisState defines the capability module's genesis state.
+message GenesisState {
+    // this line is used by starport scaffolding # genesis/proto/state
+		repeated RequestAttendance RequestAttendanceList = 3; // this line is used by starport scaffolding # genesis/proto/stateField
+		repeated Information informationList = 2; // this line is used by starport scaffolding # genesis/proto/stateField
+		repeated Attendance attendanceList = 1; // this line is used by starport scaffolding # genesis/proto/stateField
+}
+

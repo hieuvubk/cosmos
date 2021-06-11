@@ -1,0 +1,12 @@
+syntax = "proto3";
+package username.voter.voter;
+
+option go_package = "github.com/username/voter/x/voter/types";
+
+import "gogoproto/gogo.proto";
+
+message Attendance {
+  string creator = 1;
+  uint64 id = 2;
+  string time = 3; 
+}
