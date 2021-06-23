@@ -2,7 +2,6 @@ package cli
 
 import (
 	"context"
-	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -44,21 +43,18 @@ func CmdListRequestAttendance() *cobra.Command {
 
 func CmdShowRequestAttendance() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "show-RequestAttendance [id]",
+		Use:   "show-RequestAttendance",
 		Short: "shows a RequestAttendance",
-		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			id, err := strconv.ParseUint(args[0], 10, 64)
-			if err != nil {
-				return err
-			}
+			receiver := clientCtx.GetFromAddress().String()
+
 
 			params := &types.QueryGetRequestAttendanceRequest{
-				Id: id,
+				Receiver: receiver,
 			}
 
 			res, err := queryClient.RequestAttendance(context.Background(), params)
@@ -74,3 +70,4 @@ func CmdShowRequestAttendance() *cobra.Command {
 
 	return cmd
 }
+

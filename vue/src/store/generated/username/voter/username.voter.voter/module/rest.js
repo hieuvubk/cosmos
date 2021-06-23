@@ -158,9 +158,10 @@ export class Api extends HttpClient {
          * @summary this line is used by starport scaffolding # 2
          * @request GET:/username/voter/voter/RequestAttendance/{id}
          */
-        this.queryRequestAttendance = (id, params = {}) => this.request({
+        this.queryRequestAttendance = (id, query, params = {}) => this.request({
             path: `/username/voter/voter/RequestAttendance/${id}`,
             method: "GET",
+            query: query,
             format: "json",
             ...params,
         });

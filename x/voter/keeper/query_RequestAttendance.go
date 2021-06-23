@@ -4,7 +4,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"strconv"
 )
 
 func listRequestAttendance(ctx sdk.Context, keeper Keeper, legacyQuerierCdc *codec.LegacyAmino) ([]byte, error) {
@@ -18,17 +17,9 @@ func listRequestAttendance(ctx sdk.Context, keeper Keeper, legacyQuerierCdc *cod
 	return bz, nil
 }
 
-func getRequestAttendance(ctx sdk.Context, key string, keeper Keeper, legacyQuerierCdc *codec.LegacyAmino) ([]byte, error) {
-	id, err := strconv.ParseUint(key, 10, 64)
-	if err != nil {
-		return nil, err
-	}
+func getRequestAttendance(ctx sdk.Context, receiver string, keeper Keeper, legacyQuerierCdc *codec.LegacyAmino) ([]byte, error) {
 
-	if !keeper.HasRequestAttendance(ctx, id) {
-		return nil, sdkerrors.ErrKeyNotFound
-	}
-
-	msg := keeper.GetRequestAttendance(ctx, id)
+	msg := keeper.GetRequestAttendancesReceived(ctx, receiver)
 
 	bz, err := codec.MarshalJSONIndent(legacyQuerierCdc, msg)
 	if err != nil {

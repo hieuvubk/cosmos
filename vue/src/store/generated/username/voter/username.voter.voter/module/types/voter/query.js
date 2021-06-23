@@ -6,11 +6,14 @@ import { PageRequest, PageResponse, } from "../cosmos/base/query/v1beta1/paginat
 import { Information } from "../voter/information";
 import { Attendance } from "../voter/attendance";
 export const protobufPackage = "username.voter.voter";
-const baseQueryGetRequestAttendanceRequest = { id: 0 };
+const baseQueryGetRequestAttendanceRequest = { id: 0, receiver: "" };
 export const QueryGetRequestAttendanceRequest = {
     encode(message, writer = Writer.create()) {
         if (message.id !== 0) {
             writer.uint32(8).uint64(message.id);
+        }
+        if (message.receiver !== "") {
+            writer.uint32(18).string(message.receiver);
         }
         return writer;
     },
@@ -25,6 +28,9 @@ export const QueryGetRequestAttendanceRequest = {
             switch (tag >>> 3) {
                 case 1:
                     message.id = longToNumber(reader.uint64());
+                    break;
+                case 2:
+                    message.receiver = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -43,11 +49,18 @@ export const QueryGetRequestAttendanceRequest = {
         else {
             message.id = 0;
         }
+        if (object.receiver !== undefined && object.receiver !== null) {
+            message.receiver = String(object.receiver);
+        }
+        else {
+            message.receiver = "";
+        }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.id !== undefined && (obj.id = message.id);
+        message.receiver !== undefined && (obj.receiver = message.receiver);
         return obj;
     },
     fromPartial(object) {
@@ -59,6 +72,12 @@ export const QueryGetRequestAttendanceRequest = {
         }
         else {
             message.id = 0;
+        }
+        if (object.receiver !== undefined && object.receiver !== null) {
+            message.receiver = object.receiver;
+        }
+        else {
+            message.receiver = "";
         }
         return message;
     },

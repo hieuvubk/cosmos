@@ -5,6 +5,7 @@ export interface RequestAttendance {
     id: number;
     time: string;
     receiver: string;
+    accepted: boolean;
 }
 export declare const RequestAttendance: {
     encode(message: RequestAttendance, writer?: Writer): Writer;

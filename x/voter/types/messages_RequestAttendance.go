@@ -44,14 +44,14 @@ func (msg *MsgCreateRequestAttendance) ValidateBasic() error {
 	return nil
 }
 
+
 var _ sdk.Msg = &MsgUpdateRequestAttendance{}
 
-func NewMsgUpdateRequestAttendance(creator string, id uint64, time string, receiver string) *MsgUpdateRequestAttendance {
+func NewMsgUpdateRequestAttendance(creator string, id uint64, time string) *MsgUpdateRequestAttendance {
 	return &MsgUpdateRequestAttendance{
 		Id:       id,
 		Creator:  creator,
-		Time:     time,
-		Receiver: receiver,
+		Time:	  time,
 	}
 }
 

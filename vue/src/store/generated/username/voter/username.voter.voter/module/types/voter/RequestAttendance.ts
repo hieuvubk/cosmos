@@ -9,6 +9,7 @@ export interface RequestAttendance {
   id: number;
   time: string;
   receiver: string;
+  accepted: boolean;
 }
 
 const baseRequestAttendance: object = {
@@ -16,6 +17,7 @@ const baseRequestAttendance: object = {
   id: 0,
   time: "",
   receiver: "",
+  accepted: false,
 };
 
 export const RequestAttendance = {
@@ -31,6 +33,9 @@ export const RequestAttendance = {
     }
     if (message.receiver !== "") {
       writer.uint32(34).string(message.receiver);
+    }
+    if (message.accepted === true) {
+      writer.uint32(40).bool(message.accepted);
     }
     return writer;
   },
@@ -53,6 +58,9 @@ export const RequestAttendance = {
           break;
         case 4:
           message.receiver = reader.string();
+          break;
+        case 5:
+          message.accepted = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -84,6 +92,11 @@ export const RequestAttendance = {
     } else {
       message.receiver = "";
     }
+    if (object.accepted !== undefined && object.accepted !== null) {
+      message.accepted = Boolean(object.accepted);
+    } else {
+      message.accepted = false;
+    }
     return message;
   },
 
@@ -93,6 +106,7 @@ export const RequestAttendance = {
     message.id !== undefined && (obj.id = message.id);
     message.time !== undefined && (obj.time = message.time);
     message.receiver !== undefined && (obj.receiver = message.receiver);
+    message.accepted !== undefined && (obj.accepted = message.accepted);
     return obj;
   },
 
@@ -117,6 +131,11 @@ export const RequestAttendance = {
       message.receiver = object.receiver;
     } else {
       message.receiver = "";
+    }
+    if (object.accepted !== undefined && object.accepted !== null) {
+      message.accepted = object.accepted;
+    } else {
+      message.accepted = false;
     }
     return message;
   },

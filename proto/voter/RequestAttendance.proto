@@ -10,4 +10,5 @@ message RequestAttendance {
   uint64 id = 2;
   string time = 3; 
   string receiver = 4; 
+  bool   accepted = 5;
 }

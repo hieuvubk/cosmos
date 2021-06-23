@@ -125,7 +125,14 @@ export type VoterMsgUpdateAttendanceResponse = object;
 
 export type VoterMsgUpdateInformationResponse = object;
 
-export type VoterMsgUpdateRequestAttendanceResponse = object;
+export interface VoterMsgUpdateRequestAttendanceResponse {
+  creator?: string;
+
+  /** @format int64 */
+  id?: number;
+  receiver?: string;
+  accepted?: string;
+}
 
 export interface VoterQueryAllAttendanceResponse {
   Attendance?: VoterAttendance[];
@@ -191,6 +198,7 @@ export interface VoterRequestAttendance {
   id?: string;
   time?: string;
   receiver?: string;
+  accepted?: boolean;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -421,10 +429,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @summary this line is used by starport scaffolding # 2
    * @request GET:/username/voter/voter/RequestAttendance/{id}
    */
-  queryRequestAttendance = (id: string, params: RequestParams = {}) =>
+  queryRequestAttendance = (id: string, query?: { receiver?: string }, params: RequestParams = {}) =>
     this.request<VoterQueryGetRequestAttendanceResponse, RpcStatus>({
       path: `/username/voter/voter/RequestAttendance/${id}`,
       method: "GET",
+      query: query,
       format: "json",
       ...params,
     });

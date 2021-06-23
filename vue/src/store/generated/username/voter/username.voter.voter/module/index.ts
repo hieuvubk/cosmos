@@ -4,26 +4,26 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgCreateAttendance } from "./types/voter/tx";
-import { MsgDeleteRequestAttendance } from "./types/voter/tx";
 import { MsgCreateRequestAttendance } from "./types/voter/tx";
-import { MsgCreateInformation } from "./types/voter/tx";
-import { MsgUpdateInformation } from "./types/voter/tx";
-import { MsgDeleteInformation } from "./types/voter/tx";
-import { MsgUpdateAttendance } from "./types/voter/tx";
+import { MsgCreateAttendance } from "./types/voter/tx";
 import { MsgUpdateRequestAttendance } from "./types/voter/tx";
+import { MsgDeleteRequestAttendance } from "./types/voter/tx";
+import { MsgUpdateInformation } from "./types/voter/tx";
+import { MsgUpdateAttendance } from "./types/voter/tx";
+import { MsgCreateInformation } from "./types/voter/tx";
+import { MsgDeleteInformation } from "./types/voter/tx";
 import { MsgDeleteAttendance } from "./types/voter/tx";
 
 
 const types = [
-  ["/username.voter.voter.MsgCreateAttendance", MsgCreateAttendance],
-  ["/username.voter.voter.MsgDeleteRequestAttendance", MsgDeleteRequestAttendance],
   ["/username.voter.voter.MsgCreateRequestAttendance", MsgCreateRequestAttendance],
-  ["/username.voter.voter.MsgCreateInformation", MsgCreateInformation],
-  ["/username.voter.voter.MsgUpdateInformation", MsgUpdateInformation],
-  ["/username.voter.voter.MsgDeleteInformation", MsgDeleteInformation],
-  ["/username.voter.voter.MsgUpdateAttendance", MsgUpdateAttendance],
+  ["/username.voter.voter.MsgCreateAttendance", MsgCreateAttendance],
   ["/username.voter.voter.MsgUpdateRequestAttendance", MsgUpdateRequestAttendance],
+  ["/username.voter.voter.MsgDeleteRequestAttendance", MsgDeleteRequestAttendance],
+  ["/username.voter.voter.MsgUpdateInformation", MsgUpdateInformation],
+  ["/username.voter.voter.MsgUpdateAttendance", MsgUpdateAttendance],
+  ["/username.voter.voter.MsgCreateInformation", MsgCreateInformation],
+  ["/username.voter.voter.MsgDeleteInformation", MsgDeleteInformation],
   ["/username.voter.voter.MsgDeleteAttendance", MsgDeleteAttendance],
   
 ];
@@ -52,14 +52,14 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee=defaultFee, memo=null }: SignAndBroadcastOptions) => memo?client.signAndBroadcast(address, msgs, fee,memo):client.signAndBroadcast(address, msgs, fee),
-    msgCreateAttendance: (data: MsgCreateAttendance): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgCreateAttendance", value: data }),
-    msgDeleteRequestAttendance: (data: MsgDeleteRequestAttendance): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgDeleteRequestAttendance", value: data }),
     msgCreateRequestAttendance: (data: MsgCreateRequestAttendance): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgCreateRequestAttendance", value: data }),
-    msgCreateInformation: (data: MsgCreateInformation): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgCreateInformation", value: data }),
-    msgUpdateInformation: (data: MsgUpdateInformation): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgUpdateInformation", value: data }),
-    msgDeleteInformation: (data: MsgDeleteInformation): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgDeleteInformation", value: data }),
-    msgUpdateAttendance: (data: MsgUpdateAttendance): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgUpdateAttendance", value: data }),
+    msgCreateAttendance: (data: MsgCreateAttendance): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgCreateAttendance", value: data }),
     msgUpdateRequestAttendance: (data: MsgUpdateRequestAttendance): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgUpdateRequestAttendance", value: data }),
+    msgDeleteRequestAttendance: (data: MsgDeleteRequestAttendance): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgDeleteRequestAttendance", value: data }),
+    msgUpdateInformation: (data: MsgUpdateInformation): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgUpdateInformation", value: data }),
+    msgUpdateAttendance: (data: MsgUpdateAttendance): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgUpdateAttendance", value: data }),
+    msgCreateInformation: (data: MsgCreateInformation): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgCreateInformation", value: data }),
+    msgDeleteInformation: (data: MsgDeleteInformation): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgDeleteInformation", value: data }),
     msgDeleteAttendance: (data: MsgDeleteAttendance): EncodeObject => ({ typeUrl: "/username.voter.voter.MsgDeleteAttendance", value: data }),
     
   };

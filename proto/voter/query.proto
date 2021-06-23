@@ -39,6 +39,7 @@ service Query {
 // this line is used by starport scaffolding # 3
 message QueryGetRequestAttendanceRequest {
 	uint64 id = 1;
+	string receiver = 2;
 }
 
 message QueryGetRequestAttendanceResponse {

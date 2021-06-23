@@ -1,8 +1,10 @@
 package cli
 
 import (
-	"github.com/spf13/cobra"
 	"strconv"
+	"time"
+
+	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -39,24 +41,23 @@ func CmdCreateRequestAttendance() *cobra.Command {
 
 func CmdUpdateRequestAttendance() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-RequestAttendance [id] [time] [receiver]",
+		Use:   "accept-RequestAttendance [id]",
 		Short: "Update a RequestAttendance",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			id, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
 				return err
 			}
 
-			argsTime := string(args[1])
-			argsReceiver := string(args[2])
-
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgUpdateRequestAttendance(clientCtx.GetFromAddress().String(), id, string(argsTime), string(argsReceiver))
+			time := time.Now().String()
+
+			msg := types.NewMsgUpdateRequestAttendance(clientCtx.GetFromAddress().String(), id, time)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

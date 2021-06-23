@@ -14,6 +14,7 @@ export const protobufPackage = "username.voter.voter";
 /** this line is used by starport scaffolding # 3 */
 export interface QueryGetRequestAttendanceRequest {
   id: number;
+  receiver: string;
 }
 
 export interface QueryGetRequestAttendanceResponse {
@@ -64,7 +65,7 @@ export interface QueryAllAttendanceResponse {
   pagination: PageResponse | undefined;
 }
 
-const baseQueryGetRequestAttendanceRequest: object = { id: 0 };
+const baseQueryGetRequestAttendanceRequest: object = { id: 0, receiver: "" };
 
 export const QueryGetRequestAttendanceRequest = {
   encode(
@@ -73,6 +74,9 @@ export const QueryGetRequestAttendanceRequest = {
   ): Writer {
     if (message.id !== 0) {
       writer.uint32(8).uint64(message.id);
+    }
+    if (message.receiver !== "") {
+      writer.uint32(18).string(message.receiver);
     }
     return writer;
   },
@@ -92,6 +96,9 @@ export const QueryGetRequestAttendanceRequest = {
         case 1:
           message.id = longToNumber(reader.uint64() as Long);
           break;
+        case 2:
+          message.receiver = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -109,12 +116,18 @@ export const QueryGetRequestAttendanceRequest = {
     } else {
       message.id = 0;
     }
+    if (object.receiver !== undefined && object.receiver !== null) {
+      message.receiver = String(object.receiver);
+    } else {
+      message.receiver = "";
+    }
     return message;
   },
 
   toJSON(message: QueryGetRequestAttendanceRequest): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
+    message.receiver !== undefined && (obj.receiver = message.receiver);
     return obj;
   },
 
@@ -128,6 +141,11 @@ export const QueryGetRequestAttendanceRequest = {
       message.id = object.id;
     } else {
       message.id = 0;
+    }
+    if (object.receiver !== undefined && object.receiver !== null) {
+      message.receiver = object.receiver;
+    } else {
+      message.receiver = "";
     }
     return message;
   },

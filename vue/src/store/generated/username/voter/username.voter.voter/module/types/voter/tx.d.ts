@@ -13,9 +13,12 @@ export interface MsgUpdateRequestAttendance {
     creator: string;
     id: number;
     time: string;
-    receiver: string;
 }
 export interface MsgUpdateRequestAttendanceResponse {
+    creator: string;
+    id: number;
+    receiver: string;
+    accepted: string;
 }
 export interface MsgDeleteRequestAttendance {
     creator: string;
@@ -94,11 +97,11 @@ export declare const MsgUpdateRequestAttendance: {
     fromPartial(object: DeepPartial<MsgUpdateRequestAttendance>): MsgUpdateRequestAttendance;
 };
 export declare const MsgUpdateRequestAttendanceResponse: {
-    encode(_: MsgUpdateRequestAttendanceResponse, writer?: Writer): Writer;
+    encode(message: MsgUpdateRequestAttendanceResponse, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgUpdateRequestAttendanceResponse;
-    fromJSON(_: any): MsgUpdateRequestAttendanceResponse;
-    toJSON(_: MsgUpdateRequestAttendanceResponse): unknown;
-    fromPartial(_: DeepPartial<MsgUpdateRequestAttendanceResponse>): MsgUpdateRequestAttendanceResponse;
+    fromJSON(object: any): MsgUpdateRequestAttendanceResponse;
+    toJSON(message: MsgUpdateRequestAttendanceResponse): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateRequestAttendanceResponse>): MsgUpdateRequestAttendanceResponse;
 };
 export declare const MsgDeleteRequestAttendance: {
     encode(message: MsgDeleteRequestAttendance, writer?: Writer): Writer;
