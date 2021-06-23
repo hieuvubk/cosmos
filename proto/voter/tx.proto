@@ -34,10 +34,14 @@ message MsgUpdateRequestAttendance {
   string creator = 1;
   uint64 id = 2;
   string time = 3;
-  string receiver = 4;
 }
 
-message MsgUpdateRequestAttendanceResponse { }
+message MsgUpdateRequestAttendanceResponse {
+  string creator = 1;
+  uint32 id = 2;
+  string receiver = 3;
+  string accepted =4;
+ }
 
 message MsgDeleteRequestAttendance {
   string creator = 1;

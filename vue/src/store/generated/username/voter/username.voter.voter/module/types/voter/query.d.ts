@@ -7,6 +7,7 @@ export declare const protobufPackage = "username.voter.voter";
 /** this line is used by starport scaffolding # 3 */
 export interface QueryGetRequestAttendanceRequest {
     id: number;
+    receiver: string;
 }
 export interface QueryGetRequestAttendanceResponse {
     RequestAttendance: RequestAttendance | undefined;

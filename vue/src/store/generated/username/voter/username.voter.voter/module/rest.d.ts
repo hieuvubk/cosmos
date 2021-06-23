@@ -93,7 +93,13 @@ export declare type VoterMsgDeleteInformationResponse = object;
 export declare type VoterMsgDeleteRequestAttendanceResponse = object;
 export declare type VoterMsgUpdateAttendanceResponse = object;
 export declare type VoterMsgUpdateInformationResponse = object;
-export declare type VoterMsgUpdateRequestAttendanceResponse = object;
+export interface VoterMsgUpdateRequestAttendanceResponse {
+    creator?: string;
+    /** @format int64 */
+    id?: number;
+    receiver?: string;
+    accepted?: string;
+}
 export interface VoterQueryAllAttendanceResponse {
     Attendance?: VoterAttendance[];
     /**
@@ -148,6 +154,7 @@ export interface VoterRequestAttendance {
     id?: string;
     time?: string;
     receiver?: string;
+    accepted?: boolean;
 }
 export declare type QueryParamsType = Record<string | number, any>;
 export declare type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
@@ -228,7 +235,9 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @summary this line is used by starport scaffolding # 2
      * @request GET:/username/voter/voter/RequestAttendance/{id}
      */
-    queryRequestAttendance: (id: string, params?: RequestParams) => Promise<HttpResponse<VoterQueryGetRequestAttendanceResponse, RpcStatus>>;
+    queryRequestAttendance: (id: string, query?: {
+        receiver?: string;
+    }, params?: RequestParams) => Promise<HttpResponse<VoterQueryGetRequestAttendanceResponse, RpcStatus>>;
     /**
      * No description
      *

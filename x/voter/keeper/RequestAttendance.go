@@ -2,10 +2,11 @@ package keeper
 
 import (
 	"encoding/binary"
+	"strconv"
+
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/username/voter/x/voter/types"
-	"strconv"
 )
 
 // GetRequestAttendanceCount get the total number of RequestAttendance
@@ -51,6 +52,7 @@ func (k Keeper) AppendRequestAttendance(
 		Id:       count,
 		Time:     time,
 		Receiver: receiver,
+		Accepted: false,
 	}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RequestAttendanceKey))
@@ -84,9 +86,23 @@ func (k Keeper) HasRequestAttendance(ctx sdk.Context, id uint64) bool {
 	return store.Has(GetRequestAttendanceIDBytes(id))
 }
 
+func (k Keeper) CheckRequestReceiver(ctx sdk.Context, id uint64, receiver string) bool {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RequestAttendanceKey))
+	var RequestAttendance types.RequestAttendance
+	k.cdc.MustUnmarshalBinaryBare(store.Get(GetRequestAttendanceIDBytes(id)), &RequestAttendance)
+	if(RequestAttendance.GetReceiver() == receiver) {
+		return true
+	}
+	return false
+}
+
 // GetRequestAttendanceOwner returns the creator of the RequestAttendance
 func (k Keeper) GetRequestAttendanceOwner(ctx sdk.Context, id uint64) string {
 	return k.GetRequestAttendance(ctx, id).Creator
+}
+
+func (k Keeper) GetRequestAttendanceReceiver(ctx sdk.Context, id uint64) string {
+	return k.GetRequestAttendance(ctx, id).Receiver
 }
 
 // RemoveRequestAttendance removes a RequestAttendance from the store
@@ -108,6 +124,38 @@ func (k Keeper) GetAllRequestAttendance(ctx sdk.Context) (list []types.RequestAt
 		list = append(list, val)
 	}
 
+	return
+}
+
+func (k Keeper) GetRequestAttendancesReceived(ctx sdk.Context, receiver string) (list []types.RequestAttendance) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RequestAttendanceKey))
+	iterator := sdk.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var val types.RequestAttendance
+		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		if(val.GetCreator() == receiver && !val.GetAccepted()) {
+			list = append(list, val)
+		}
+	}
+	return
+}
+
+func (k Keeper) GetRequestAttendancesReceivedByDate(ctx sdk.Context, receiver string, date string) (list []types.RequestAttendance) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RequestAttendanceKey))
+	iterator := sdk.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var val types.RequestAttendance
+		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		if(val.GetCreator() == receiver && !val.GetAccepted() && val.GetTime() == date) {
+			list = append(list, val)
+		}
+	}
 	return
 }
 

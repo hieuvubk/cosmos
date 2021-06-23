@@ -2,13 +2,12 @@ package rest
 
 import (
 	"net/http"
-	"strconv"
+	"time"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/gorilla/mux"
 	"github.com/username/voter/x/voter/types"
 )
 
@@ -55,16 +54,15 @@ func createRequestAttendanceHandler(clientCtx client.Context) http.HandlerFunc {
 type updateRequestAttendanceRequest struct {
 	BaseReq  rest.BaseReq `json:"base_req"`
 	Creator  string       `json:"creator"`
-	Time     string       `json:"time"`
-	Receiver string       `json:"receiver"`
+	Id     	 uint64       `json:"id"`
 }
 
 func updateRequestAttendanceHandler(clientCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		id, err := strconv.ParseUint(mux.Vars(r)["id"], 10, 64)
-		if err != nil {
-			return
-		}
+		// id, err := strconv.ParseUint(mux.Vars(r)["id"], 10, 64)
+		// if err != nil {
+		// 	return
+		// }
 
 		var req updateRequestAttendanceRequest
 		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
@@ -77,21 +75,18 @@ func updateRequestAttendanceHandler(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		_, err = sdk.AccAddressFromBech32(req.Creator)
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-			return
-		}
+		date := time.Now().String()
 
-		parsedTime := req.Time
-
-		parsedReceiver := req.Receiver
+		// _, err = sdk.AccAddressFromBech32(req.Creator)
+		// if err != nil {
+		// 	rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+		// 	return
+		// }
 
 		msg := types.NewMsgUpdateRequestAttendance(
 			req.Creator,
-			id,
-			parsedTime,
-			parsedReceiver,
+			req.Id,
+			date,
 		)
 
 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
@@ -101,14 +96,15 @@ func updateRequestAttendanceHandler(clientCtx client.Context) http.HandlerFunc {
 type deleteRequestAttendanceRequest struct {
 	BaseReq rest.BaseReq `json:"base_req"`
 	Creator string       `json:"creator"`
+	Id 		uint64 		 `json:"id"`
 }
 
 func deleteRequestAttendanceHandler(clientCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		id, err := strconv.ParseUint(mux.Vars(r)["id"], 10, 64)
-		if err != nil {
-			return
-		}
+		// id, err := strconv.ParseUint(mux.Vars(r)["id"], 10, 64)
+		// if err != nil {
+		// 	return
+		// }
 
 		var req deleteRequestAttendanceRequest
 		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
@@ -121,15 +117,15 @@ func deleteRequestAttendanceHandler(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		_, err = sdk.AccAddressFromBech32(req.Creator)
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-			return
-		}
+		// _, err = sdk.AccAddressFromBech32(req.Creator)
+		// if err != nil {
+		// 	rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+		// 	return
+		// }
 
 		msg := types.NewMsgDeleteRequestAttendance(
 			req.Creator,
-			id,
+			req.Id,
 		)
 
 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)

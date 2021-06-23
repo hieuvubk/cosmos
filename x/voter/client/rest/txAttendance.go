@@ -3,6 +3,7 @@ package rest
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -15,7 +16,6 @@ import (
 type createAttendanceRequest struct {
 	BaseReq rest.BaseReq `json:"base_req"`
 	Creator string       `json:"creator"`
-	Time    string       `json:"time"`
 }
 
 func createAttendanceHandler(clientCtx client.Context) http.HandlerFunc {
@@ -37,7 +37,7 @@ func createAttendanceHandler(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		parsedTime := req.Time
+		parsedTime := time.Now().String()
 
 		msg := types.NewMsgCreateAttendance(
 			req.Creator,

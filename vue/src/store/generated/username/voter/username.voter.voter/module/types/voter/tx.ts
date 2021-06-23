@@ -19,10 +19,14 @@ export interface MsgUpdateRequestAttendance {
   creator: string;
   id: number;
   time: string;
-  receiver: string;
 }
 
-export interface MsgUpdateRequestAttendanceResponse {}
+export interface MsgUpdateRequestAttendanceResponse {
+  creator: string;
+  id: number;
+  receiver: string;
+  accepted: string;
+}
 
 export interface MsgDeleteRequestAttendance {
   creator: string;
@@ -264,12 +268,7 @@ export const MsgCreateRequestAttendanceResponse = {
   },
 };
 
-const baseMsgUpdateRequestAttendance: object = {
-  creator: "",
-  id: 0,
-  time: "",
-  receiver: "",
-};
+const baseMsgUpdateRequestAttendance: object = { creator: "", id: 0, time: "" };
 
 export const MsgUpdateRequestAttendance = {
   encode(
@@ -284,9 +283,6 @@ export const MsgUpdateRequestAttendance = {
     }
     if (message.time !== "") {
       writer.uint32(26).string(message.time);
-    }
-    if (message.receiver !== "") {
-      writer.uint32(34).string(message.receiver);
     }
     return writer;
   },
@@ -311,9 +307,6 @@ export const MsgUpdateRequestAttendance = {
           break;
         case 3:
           message.time = reader.string();
-          break;
-        case 4:
-          message.receiver = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -342,11 +335,6 @@ export const MsgUpdateRequestAttendance = {
     } else {
       message.time = "";
     }
-    if (object.receiver !== undefined && object.receiver !== null) {
-      message.receiver = String(object.receiver);
-    } else {
-      message.receiver = "";
-    }
     return message;
   },
 
@@ -355,7 +343,6 @@ export const MsgUpdateRequestAttendance = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.id !== undefined && (obj.id = message.id);
     message.time !== undefined && (obj.time = message.time);
-    message.receiver !== undefined && (obj.receiver = message.receiver);
     return obj;
   },
 
@@ -380,22 +367,34 @@ export const MsgUpdateRequestAttendance = {
     } else {
       message.time = "";
     }
-    if (object.receiver !== undefined && object.receiver !== null) {
-      message.receiver = object.receiver;
-    } else {
-      message.receiver = "";
-    }
     return message;
   },
 };
 
-const baseMsgUpdateRequestAttendanceResponse: object = {};
+const baseMsgUpdateRequestAttendanceResponse: object = {
+  creator: "",
+  id: 0,
+  receiver: "",
+  accepted: "",
+};
 
 export const MsgUpdateRequestAttendanceResponse = {
   encode(
-    _: MsgUpdateRequestAttendanceResponse,
+    message: MsgUpdateRequestAttendanceResponse,
     writer: Writer = Writer.create()
   ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.id !== 0) {
+      writer.uint32(16).uint32(message.id);
+    }
+    if (message.receiver !== "") {
+      writer.uint32(26).string(message.receiver);
+    }
+    if (message.accepted !== "") {
+      writer.uint32(34).string(message.accepted);
+    }
     return writer;
   },
 
@@ -411,6 +410,18 @@ export const MsgUpdateRequestAttendanceResponse = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.id = reader.uint32();
+          break;
+        case 3:
+          message.receiver = reader.string();
+          break;
+        case 4:
+          message.accepted = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -419,24 +430,68 @@ export const MsgUpdateRequestAttendanceResponse = {
     return message;
   },
 
-  fromJSON(_: any): MsgUpdateRequestAttendanceResponse {
+  fromJSON(object: any): MsgUpdateRequestAttendanceResponse {
     const message = {
       ...baseMsgUpdateRequestAttendanceResponse,
     } as MsgUpdateRequestAttendanceResponse;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
+    } else {
+      message.id = 0;
+    }
+    if (object.receiver !== undefined && object.receiver !== null) {
+      message.receiver = String(object.receiver);
+    } else {
+      message.receiver = "";
+    }
+    if (object.accepted !== undefined && object.accepted !== null) {
+      message.accepted = String(object.accepted);
+    } else {
+      message.accepted = "";
+    }
     return message;
   },
 
-  toJSON(_: MsgUpdateRequestAttendanceResponse): unknown {
+  toJSON(message: MsgUpdateRequestAttendanceResponse): unknown {
     const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.id !== undefined && (obj.id = message.id);
+    message.receiver !== undefined && (obj.receiver = message.receiver);
+    message.accepted !== undefined && (obj.accepted = message.accepted);
     return obj;
   },
 
   fromPartial(
-    _: DeepPartial<MsgUpdateRequestAttendanceResponse>
+    object: DeepPartial<MsgUpdateRequestAttendanceResponse>
   ): MsgUpdateRequestAttendanceResponse {
     const message = {
       ...baseMsgUpdateRequestAttendanceResponse,
     } as MsgUpdateRequestAttendanceResponse;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = 0;
+    }
+    if (object.receiver !== undefined && object.receiver !== null) {
+      message.receiver = object.receiver;
+    } else {
+      message.receiver = "";
+    }
+    if (object.accepted !== undefined && object.accepted !== null) {
+      message.accepted = object.accepted;
+    } else {
+      message.accepted = "";
+    }
     return message;
   },
 };
