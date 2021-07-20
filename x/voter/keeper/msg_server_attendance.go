@@ -35,11 +35,12 @@ func (k msgServer) CreateAttendance(goCtx context.Context, msg *types.MsgCreateA
 	}
 
 	// deduct a number of tokens from the account of the msg's creator if they were checking late
-	currentHMSString := msgTimeParts[1]
-	currentHMS, _ := time.Parse("15:04:05.999999999", currentHMSString)
+	currentHMSString := msgTimeParts[0] + " " + msgTimeParts[1]
+	currentHMS, _ := time.Parse("2006-01-02 15:04:05.999999999", currentHMSString)
 	currentHour := currentHMS.Hour()
+	currentWeekday := currentHMS.Weekday().String()
 	// checking late
-	if currentHour >= 9 {
+	if currentHour >= 9 && currentWeekday != "Saturday" && currentWeekday != "Sunday" {
 		moduleAcct := sdk.AccAddress(crypto.AddressHash([]byte(types.ModuleName)))
 		// deduct token
 		feeCoins, err := sdk.ParseCoinsNormalized("10token")
